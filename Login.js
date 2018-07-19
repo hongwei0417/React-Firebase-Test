@@ -16,32 +16,32 @@ export default class login extends React.Component {
     async signUp(email, pass) {
         let message = ""
         try {
-        await firebase.auth().createUserWithEmailAndPassword(email, pass);
+          await firebase.auth().createUserWithEmailAndPassword(email, pass);
 
-        message = "Account created"
-        console.log(message)
-        this.showMessage(message)
+          message = "Account created"
+          console.log(message)
+          this.showMessage(message)
 
         } catch (error) {
-            message = error.toString()
-            console.log(message)
-            this.showMessage(message)
+          message = error.toString()
+          console.log(message)
+          this.showMessage(message)
         }
     }
 
     async login(email, pass) {
         
         try {
-            await firebase.auth().signInWithEmailAndPassword(email, pass);
-
-            console.log("Logged In!");
-            this.showMessage("Logged In!")
-            this.props.navigation.navigate('User')
-            // Navigate to the Home page
+          await firebase.auth().signInWithEmailAndPassword(email, pass);
+          console.log("Logged In!");
+          this.showMessage("Logged In!")
+          console.log(firebase.auth().currentUser)
+          this.props.navigation.navigate('User')
+          // Navigate to the Home page
 
         } catch (error) {
-            console.log(error.toString())
-            this.showMessage(error.toString())
+          console.log(error.toString())
+          this.showMessage(error.toString())
         }
 
     }
@@ -49,7 +49,7 @@ export default class login extends React.Component {
     async loginWithFacebook() {
 
       try {
-        const {type, token} = await Expo.Facebook.logInWithReadPermissionsAsync('200208223955724', { permission: ['public_profile'] })
+        const {type, token} = await Expo.Facebook.logInWithReadPermissionsAsync('200208223955724', { permissions: ['email'] })
       
         if(type == 'success') {
           const credential = firebase.auth.FacebookAuthProvider.credential(token)

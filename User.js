@@ -7,7 +7,8 @@ import * as firebase from "firebase";
 
 export default class User extends React.Component {
     static navigationOptions = {
-      header: null
+      header: null,
+      gesturesEnabled: false
     }
 
     constructor(props) {
@@ -37,9 +38,11 @@ export default class User extends React.Component {
             
             todoRef.on('value',
               (data) => {
-                if(data.child(this.state.userId).exists()) {
+                let path = user.uid + "/todo"
+                console.log(path)
+                if(data.child(user.uid).exists()) {
                   this.setState({
-                    listViewData: data.child(this.state.userId + '/todo').val()
+                    listViewData: data.child(path).val()
                   })
                 }
                 else {
@@ -66,6 +69,7 @@ export default class User extends React.Component {
         await firebase.auth().signOut();
         this.showMessage("Sign out!")
         // Navigate to login view
+        console.log(firebase.auth().currentUser)
         this.props.navigation.goBack()
 
       } catch (error) {

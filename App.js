@@ -29,6 +29,9 @@ const RootStack = createStackNavigator({
     },
     User: {
         screen: user
+    },
+    User2: {
+      screen: User2
     }
 },
 {
