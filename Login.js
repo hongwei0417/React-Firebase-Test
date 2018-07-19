@@ -6,6 +6,9 @@ import * as firebase from "firebase"
 
 
 export default class login extends React.Component {
+    static navigationOptions = {
+      title: "Firebase Login"
+    }
     componentDidMount() {
         
     }
@@ -115,7 +118,7 @@ export default class login extends React.Component {
             <Button style={{ marginTop: 10 }} 
             full 
             rounded 
-            primary
+            warning
             onPress={() => this.signUp(this.state.email, this.state.password)}
             >
               <Text style={{ color: 'white'}}>Sign Up</Text>
@@ -126,7 +129,7 @@ export default class login extends React.Component {
             primary
             onPress={() => this.loginWithFacebook()}
             >
-              <Text style={{ color: 'white'}}>Login With Facebook</Text>
+              <Text style={{ color: 'white'}}>Facebook</Text>
             </Button>
           </Form>
         </Container>

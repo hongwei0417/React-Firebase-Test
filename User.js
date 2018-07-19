@@ -24,37 +24,36 @@ export default class User extends React.Component {
           userId: ""
         }
     }
-    async componentDidMount() {
+    componentDidMount() {
         try {
             // Get User Credentials
-            let user = await firebase.auth().currentUser;
+            let user = firebase.auth().currentUser;
             this.setState({
                 userId: user.uid //取得登入用戶Id
             })
 
-            let todoRef = await firebase.database().ref('/Users')
-            console.log(todoRef)
+            let todoRef = firebase.database().ref('/Users')
+            
             
             todoRef.on('value',
-            (data) => {
-              if(data.child(this.state.userId).exists()) {
-                this.setState({
-                  listViewData: data.child(this.state.userId + '/todo').val()
-                })
+              (data) => {
+                if(data.child(this.state.userId).exists()) {
+                  this.setState({
+                    listViewData: data.child(this.state.userId + '/todo').val()
+                  })
+                }
+                else {
+                  this.setState({
+                    listViewData: []
+                  })
+                }
+                console.log(todoRef)
+                console.log(data)
+                console.log(data.key)
+                console.log(data.val())
+                console.log(data.child(this.state.userId).exists())
               }
-              else {
-                this.setState({
-                  listViewData: []
-                })
-              }
-              console.log(data)
-              console.log(data.key)
-              console.log(data.val())
-              console.log(data.child(this.state.userId).exists())
-            }
             )
-            
-            
         }
         catch(e) {
             console.log(e.toString())
@@ -95,14 +94,14 @@ export default class User extends React.Component {
     }
 
     async deleteRow(secId, rowId, rowMap, data) {
-
+      console.log(data)
       try {
         rowMap[`${secId}${rowId}`].props.closeRow()
         let newList = [...this.state.listViewData]
         newList.splice(rowId, 1) //從rowId那一列向後刪除一個
         
-        let ref = await firebase.database().ref('/Users/' + this.state.userId )
-        ref.update({todo: newList});
+        let ref = firebase.database().ref('/Users/' + this.state.userId )
+        await ref.update({todo: newList});
       }
       catch(e) {
         console.log(e.toString())
