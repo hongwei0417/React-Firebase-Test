@@ -66,6 +66,30 @@ export default class login extends React.Component {
       
     }
 
+    async loginWithGoogle() {
+      try {
+        const result = await Expo.Google.logInAsync({
+          androidClientId: "126188651936-j1k8ic9em32ogj7vlkeouhsi1l3q56nh.apps.googleusercontent.com",
+          iosClientId: "126188651936-43152mu68h7bsr3qdiou9030lgra7ior.apps.googleusercontent.com",
+          scopes: ['profile', 'email'],
+        });
+
+        if (result.type === 'success') {
+          const credential = firebase.auth.GoogleAuthProvider.credential(result.idToken, result.accessToken)
+
+          await firebase.auth().signInAndRetrieveDataWithCredential(credential)
+          this.showMessage("Login With Google\nSuccess!")
+          this.props.navigation.navigate('User')
+
+        } else {
+          return {cancelled: true};
+        }
+      } catch(e) {
+        console.log(e.toString())
+        this.showMessage(e.toString())
+      }
+    }
+
     nextPage() {
         this.props.navigation.navigate('User')
     }
@@ -116,7 +140,7 @@ export default class login extends React.Component {
               <Text style={{ color: 'white'}}>Login</Text>
             </Button>
             <Button style={{ marginTop: 10 }} 
-            full 
+            full
             rounded 
             warning
             onPress={() => this.signUp(this.state.email, this.state.password)}
@@ -127,9 +151,17 @@ export default class login extends React.Component {
             full 
             rounded 
             primary
-            onPress={() => this.loginWithFacebook()}
+            onPress={this.loginWithFacebook.bind(this)}
             >
               <Text style={{ color: 'white'}}>Facebook</Text>
+            </Button>
+            <Button style={{ marginTop: 10 }} 
+            full 
+            rounded 
+            danger
+            onPress={this.loginWithGoogle.bind(this)}
+            >
+              <Text style={{ color: 'white'}}>Google</Text>
             </Button>
           </Form>
         </Container>
